@@ -2,27 +2,35 @@
 // required headers
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
+ 
 // include database and object files
 include_once '../config/core.php';
 include_once '../shared/utilities.php';
 include_once '../config/database.php';
 include_once '../objects/product.php';
+ 
 // utilities
 $utilities = new Utilities();
+ 
 // instantiate database and product object
 $database = new Database();
 $db = $database->getConnection();
+ 
 // initialize object
 $product = new Product($db);
+ 
 // query products
 $stmt = $product->readPaging($from_record_num, $records_per_page);
 $num = $stmt->rowCount();
+ 
 // check if more than 0 record found
 if ($num > 0) {
+ 
     // products array
     $products_arr = array();
     $products_arr["records"] = array();
     $products_arr["paging"] = array();
+ 
     // retrieve our table contents
     // fetch() is faster than fetchAll()
     // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
@@ -43,6 +51,8 @@ if ($num > 0) {
 
         array_push($products_arr["records"], $product_item);
     }
+ 
+ 
     // include paging
     $total_rows = $product->count();
     $page_url = "{$home_url}product/read_paging.php?";
